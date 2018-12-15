@@ -1,0 +1,70 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+	<title>Design 1</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="keywords" content="" />
+	<meta name="description" content="" />
+	<link rel="stylesheet" type="text/css" href="default.css">
+
+	<!--D3 scripts-->
+	<script src="https://d3js.org/d3.v5.js"></script>
+	<script src="process.js"></script>
+	<!--Other scirpts-->
+	<script src="flag.js"></script>
+</head>
+
+<body>
+	<div id="canvas">
+		<svg id="svg">
+			<defs>
+				<pattern id="smallGrid" width="8" height="8" patternUnits="userSpaceOnUse">
+				  <path d="M 8 0 L 0 0 0 8" fill="none" stroke="gray" stroke-width="0.5"/>
+				</pattern>
+				<pattern id="grid" width="80" height="80" patternUnits="userSpaceOnUse">
+				  <rect width="80" height="80" fill="url(#smallGrid)"/>
+				  <path d="M 80 0 L 0 0 0 80" fill="none" stroke="gray" stroke-width="1"/>
+				</pattern>
+			</defs>
+			<g id="grid" width="1000" height="800">
+				<rect width="100%" height="100%" fill="url(#grid)" />
+			</g> 
+		</svg>
+	</div>
+	<a><span id="play" onclick="playButton()">&#10074;&#10074;</span></a>
+	<span>Year:</span>
+	<span id='year'>1960</span>
+	<p><input type="range" min="1960" max="2017" value="1960" class="slider" id="yearSlider" oninput="sliderInput();" onchange="sliderChange()"></p>
+	<script>
+		var playCurrent = 1;
+		function playButton() {
+			var button = document.getElementById('play');
+			if (playCurrent) {
+				// Click Pause
+				button.innerHTML = "&#9658;";
+				playCurrent = 0;
+				animateStop();
+			} else {
+				// Click start
+				button.innerHTML = "&#10074;&#10074;";
+				playCurrent = 1;
+				animateStart();
+			}
+		}
+		function sliderInput() {
+			if (playCurrent) playButton();
+			var yearField = document.getElementById('year');
+			var inputField = document.getElementById('yearSlider');
+			yearField.innerHTML = inputField.value;
+		}
+		function sliderChange() {
+			var yearField = document.getElementById('year');
+			changeToYear(Math.round(yearField.innerHTML));
+		}
+	</script>
+	<p>Each dot represents 1 billion U.S. dollar.</p>
+	<p>Grey dots represent all the other nations that provide data at the corresponding time point.</p>
+</body>
+
+</html>
