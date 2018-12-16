@@ -11,17 +11,12 @@ var animation = true;
 var timeout = 3000;
 
 var circleR = 8;
-var BasicUnit = 1*10e10;
+var BasicUnit = 1e11;
 
 // scales
 var countryColor;
 
 process();
-
-function init() {
-	defs = d3.select(".svg").select("defs");
-
-}
 
 function process() {
 	
