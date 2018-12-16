@@ -19,6 +19,14 @@ var yearMax = 2017;
 var yMin = 1e0;
 var yMax = 1e8;
 var dragCircleR = 10;
+var dataDotR = 4;
+
+//scales
+var xScale;
+var yScale;
+var countryColor;
+var xInverse;
+var yInverse;
 
 process();
 
@@ -29,9 +37,9 @@ function process() {
 
     d3.dsv(",", "GDP.csv").then(function(data){
 		DataParse(data);
-		//DefineFlag(countries);
 		DrawSVG(dataByCountry, countries);
 		Drag();
+		ShowData()
 	});
 
 	function DataParse(data) {
@@ -64,17 +72,28 @@ function process() {
 
 	function DrawSVG(data, countries) {
         // scales
-        var xScale = d3.scaleTime()
+        xScale = d3.scaleTime()
             .domain([new Date(yearMin, 0), new Date(yearMax, 0)])
             .range([leftPadding, width+leftPadding]);
 
-        var yScale = d3.scaleLog()
+        yScale = d3.scaleLog()
             .domain([yMin, yMax])
             .range([height+topPadding, topPadding]);
 
-        var countryColor = d3.scaleOrdinal()
+        countryColor = d3.scaleOrdinal()
 			.domain(countries)
 			.range(d3.schemeCategory10);
+
+		// Inverse scales
+		xInverse = d3.scaleLinear()
+			.domain([leftPadding, width+leftPadding])
+			.range([yearMin, yearMax]);
+		yInverse = function(value) {
+			var linear = d3.scaleLinear()
+				.domain([height+topPadding,topPadding])
+				.range([Math.log10(yMin),Math.log10(yMax)]);
+			return Math.pow(10, linear(value));
+		}
 
         // curve generator
         var line = d3.line()
@@ -137,14 +156,6 @@ function process() {
 
 	function Drag() {
         var svg = d3.select("#svg");
-        /*var lineBox = svg.append('rect')
-        	.attr('id','lineBox')
-        	.attr('fill', 'none')
-        	.attr('stroke', 'none')
-        	.attr('x', leftPadding)
-        	.attr('y', topPadding)
-        	.attr('width', width)
-        	.attr('height', height);*/
         var rects = svg.insert('g', ":first-child")
             .attr('id', 'rects');
 	    var drag = d3.drag()
@@ -302,17 +313,6 @@ function process() {
 	    }
 
 	    function CheckSelection(currentRect) {
-	    	// Inverse scales
-	        var xInverse = d3.scaleLinear()
-	            .domain([leftPadding, width+leftPadding])
-	            .range([yearMin, yearMax]);
-	        var yInverse = function(value) {
-	            var linear = d3.scaleLinear()
-	            	.domain([height+topPadding,topPadding])
-	            	.range([Math.log10(yMin),Math.log10(yMax)]);
-				return Math.pow(10, linear(value));
-	        }
-
 	        var rectArea = InverseRectInfo(Math.floor(currentRect.attr('x')), 
 	            Math.floor(currentRect.attr('y')), 
 	            Math.floor(currentRect.attr('width')), 
@@ -454,5 +454,93 @@ function process() {
 			rectNum = 0;
 			d3.selectAll(".rect").remove();
 		}
+	}
+
+	function ShowData() {
+		var svg = d3.select("svg");
+		/*var lineBox = svg.insert('rect', ":first-child")
+        	.attr('id','lineBox')
+        	.attr('fill', 'black')
+        	.attr('fill-opacity', 0)
+        	.attr('stroke', 'none')
+        	.attr('x', leftPadding)
+        	.attr('y', topPadding)
+        	.attr('width', width)
+        	.attr('height', height);*/
+		var showDataArea = svg.append("g")
+			.attr('id', 'showDataArea');
+		var scanLine = showDataArea.append("line")
+			.attr("id", "scanLine")
+			.attr("stroke", "black")
+			.attr("stroke-width", 2)
+			.attr("stroke-opacity", 0)
+			.attr("y1", topPadding)
+			.attr("y2", topPadding+height);
+		svg
+			.on("mousemove", function(){
+				var p = d3.mouse(this);
+				if ((p[0] < leftPadding) || (p[0] > leftPadding+width) || (p[1] < topPadding) || (p[1] > topPadding+height)) {
+					scanLine.attr("stroke-opacity", 0)
+						.attr("x1", 0)
+						.attr("x2", 0);
+					showDataArea.selectAll(".dataDot").remove();
+					showDataArea.selectAll(".dataValue").remove();
+				} else {
+					scanLine.attr("stroke-opacity", 1)
+						.attr("x1", p[0]+5)
+						.attr("x2", p[0]+5);
+					if (currentSelectedCountries) {
+						var dataDots = showDataArea.selectAll(".dataDot")
+							.attr("cx", xScale(new Date(Math.round(xInverse(p[0])),0)))
+							.attr("cy", function(d){
+								var dataPair = d.dataArray.find(function(d){return d.year.getFullYear() == Math.round(xInverse(p[0]))});
+								if (dataPair.data) return yScale(dataPair.data)
+							});
+						dataDots.data(currentSelectedCountries, function(d){return d.code;})
+							.enter().append("circle")
+							.attr("id", function(d){return "dataDot-"+d.code;})
+							.attr("class", "dataDot")
+							.attr("fill", function(d){return countryColor(d.code);})
+							.attr("cx", xScale(new Date(Math.round(xInverse(p[0])),0)))
+							.attr("cy", function(d){
+								var dataPair = d.dataArray.find(function(d){return d.year.getFullYear() == Math.round(xInverse(p[0]))});
+								if (dataPair.data) return yScale(dataPair.data);
+								else return Number.MAX_SAFE_INTEGER;
+							})
+							.attr("r", dataDotR);
+						dataDots.data(currentSelectedCountries, function(d){return d.code;}).exit().remove();
+						var dataValues = showDataArea.selectAll(".dataValue")
+							.attr("x", xScale(new Date(Math.round(xInverse(p[0])),0)))
+							.attr("y", function(d){
+								var dataPair = d.dataArray.find(function(d){return d.year.getFullYear() == Math.round(xInverse(p[0]))});
+								if (dataPair.data) return yScale(dataPair.data);
+								else return Number.MAX_SAFE_INTEGER;
+							})
+							.text(function(d){
+								var dataPair = d.dataArray.find(function(d){return d.year.getFullYear() == Math.round(xInverse(p[0]))});
+								if (dataPair) return " $ "+Number.parseFloat(dataPair.data*BasicUnit).toPrecision(4);
+								else return "";
+							});
+						dataValues.data(currentSelectedCountries, function(d){return d.code;})
+							.enter().append("text")
+							.attr("id", function(d){return "dataValue-"+d.code;})
+							.attr("class", "dataValue")
+							.attr("x", xScale(new Date(Math.round(xInverse(p[0])),0)))
+							.attr("y", function(d){
+								var dataPair = d.dataArray.find(function(d){return d.year.getFullYear() == Math.round(xInverse(p[0]))});
+								if (dataPair.data) return yScale(dataPair.data);
+								else return Number.MAX_SAFE_INTEGER;
+							})
+							.text(function(d){
+								var dataPair = d.dataArray.find(function(d){return d.year.getFullYear() == Math.round(xInverse(p[0]))});
+								if (dataPair) return " $ "+Number.parseFloat(dataPair.data*BasicUnit).toPrecision(4);
+								else return "";
+							});
+						dataValues.data(currentSelectedCountries, function(d){return d.code;}).exit().remove();
+					}
+					
+				}
+			});
+			
 	}
 }
