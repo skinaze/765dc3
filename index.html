@@ -9,24 +9,128 @@
 	<link rel="stylesheet" type="text/css" href="pandoc.css">
 </head>
 <body>
-    <h1 id="cs765-dc3-designs">CS765 DC3 designs</h1>
-    <h2 id="dataset">Dataset</h2>
-    <p>I have found a dataset online describing the GPD of different nations since 1960. <a href="https://data.worldbank.org/indicator/NY.GDP.MKTP.CD?end=2017&amp;start=1960&amp;view=chart" class="uri">https://data.worldbank.org/indicator/NY.GDP.MKTP.CD?end=2017&amp;start=1960&amp;view=chart</a> This dataset involve all the countries in the world (268) and covers a period over 70 years. So, this dataset fits into the defined case:</p>
-    <ol type="1">
-    <li>The number of “lines” (N) is the number of countries (268).</li>
-    <li>The number of samples of each line (M) is 77.</li>
-    <li>The dynamic range of the values is between <span class="math inline">8 × 10<sup>7</sup></span> and <span class="math inline">8 × 10<sup>13</sup></span>.</li>
-    </ol>
-    <p>I used this dataset for both of my designs. But the designs themselves can also be implemented for other datasets</p>
-    <h2 id="design">Design</h2>
-    <h3 id="design-1">Design 1</h3>
-    <p><a href="design1/">Go to Design 1</a></p>
-    <p>The first design encodes the year into data change during animation. So, it should work all the similar type of dataset as long as one measurement is time.</p>
-    <p>In this design, the countries are represented by their national flags and the area taken by one country is the amount of GDP. The change of GDP is shown as an animation through time. This animation starts automatically and can pause or continue using the button at the bottom left of the design. The user can also use the slider at the bottom of the design to slide to a fixed year.</p>
-    <p>The problem with this design is that it requires a lot of computational power and make requires a lot of time to become stable for the recent years.</p>
-    <h3 id="deisgn-2">Deisgn 2</h3>
-    <p><a href="design2/">Go to Design 2</a></p>
-    <p>The second design is an enhanced spaghetti plot with a few interactions enabled. The purpose of this design is to help to identify lines with similar values or values changes. This design should work on other datasets with no problem.</p>
-    <p>In this design, the countries are encoded in different colors as well as national flags at the right of the plot. The user can drag a rectangle on the canvas area to create a block of selection. All the lines with data points in this area will be highlighted. Having multiple rectangles is supported, and only those lines that fit into all the All the rectangles will be highlighted. The user can move the mouse over the canvas area to show accurate data of the highlighted lines at the given x position. The user can also hover over the a line to see what nation that the line belongs to. The user can also move all the rectangle by dragging the blue dot at the bottom right to move all the rectangles. This can be helpful to identify lines with similar patterns.</p>
+	<h1 id="cs765-dc3-designs">CS765 DC3 designs</h1>
+	<h2 id="dataset">Dataset</h2>
+	<p>I have found a dataset online describing the GDP of different nations since 1960. <a href="https://data.worldbank.org/indicator/NY.GDP.MKTP.CD?end=2017&amp;start=1960&amp;view=chart" class="uri">https://data.worldbank.org/indicator/NY.GDP.MKTP.CD?end=2017&amp;start=1960&amp;view=chart</a> This dataset involve all the countries in the world (268) and covers a period over 70 years. So, this dataset fits into the defined case:</p>
+	<ol type="1">
+	<li>The number of “lines” (N) is the number of countries (268).</li>
+	<li>The number of samples of each line (M) is 77.</li>
+	<li>The range of the values is between <span class="math inline">8 × 10<sup>7</sup></span> and <span class="math inline">8 × 10<sup>13</sup></span>.</li>
+	</ol>
+	<p>I used this dataset for both of my designs. But the designs themselves can also be implemented for other datasets.</p>
+	<h2 id="design">Design</h2>
+	<h3 id="design-1">Design 1</h3>
+	<figure>
+	<img src="screenshots/Design1Overview.png" alt="Design 1 Overview" /><figcaption>Design 1 Overview</figcaption>
+	</figure>
+	<p><a href="design1/">Go to Design 1</a></p>
+	<p>The first design encodes the year into data change during animation. So, it should work on the similar type of datasets as long the samples (M) is the time.</p>
+	<h4 id="encoding">Encoding</h4>
+	<ol type="1">
+	<li>The countries (N) are represented by their national flags.</li>
+	<li>The years (M) are represented by the slider at the bottom and shown as the change of the graph.</li>
+	<li>The GDPs (values) are represented by the number of circles in the graph with each circle representing 100 trillion U.S. dollar. The countries with less than 50 trillion U.S. dollar GDP are encoded together in the grey circles.</li>
+	</ol>
+	<h4 id="animation-interation">Animation &amp; Interation</h4>
+	<ol type="1">
+	<li>The design has an animation that starts automatically to show the change of GDPs over the years. This animation can be paused and continued using the button at the bottom left.</li>
+	</ol>
+	<figure>
+	<img src="screenshots/Design1Animation.gif" alt="Design 1 Animation: Animation shows the change of GDPs over years." /><figcaption>Design 1 Animation: Animation shows the change of GDPs over years.</figcaption>
+	</figure>
+	<ol start="2" type="1">
+	<li>The user can drag the slider at the bottom to slide to the desired year.</li>
+	</ol>
+	<figure>
+	<img src="screenshots/Design1Slider.gif" alt="Design 1 Slider: Slide to show the GDP of a year." /><figcaption>Design 1 Slider: Slide to show the GDP of a year.</figcaption>
+	</figure>
+	<ol start="3" type="1">
+	<li>Hovering over the circle to see the name of the country that a circle belongs to.</li>
+	</ol>
+	<figure>
+	<img src="screenshots/Design1CircleDetails.gif" alt="Disign 1 Circle Details: Hover over the circle to see the country name." /><figcaption>Disign 1 Circle Details: Hover over the circle to see the country name.</figcaption>
+	</figure>
+	<h4 id="design-critique">Design Critique</h4>
+	<p>This design has three purposes:</p>
+	<ol type="1">
+	<li>To show the approximate value (GDP) of each line (Country).</li>
+	<li>To show the lines (countries) that have the top values (GDPs) among all the lines.</li>
+	<li>To show the portion of each line (country) in the sum of values (GDPs).</li>
+	</ol>
+	<p>However, the design also has some limitations:</p>
+	<ol type="1">
+	<li>The value is not accurate with an accuracy of around 100 trillion U.S. dollar.</li>
+	<li>If one wishes to know the values (GDPs) of lines (countries) with small values (GDPs), it’s not possible.</li>
+	<li>It’s not easy to compare the values (GDPs) of a line (country) between two samples (years) due to the animation effect.</li>
+	<li>It’s not easy to compare the values (GDPs) between to lines (countries) that have similar values (GDPs) unless counting the exact number of circles.</li>
+	<li>The animation of a sample (year) takes a long time to finish when the values (GDPs) are large, and it’s really computational ineffective to build the visual result.</li>
+	</ol>
+	<h3 id="deisgn-2">Deisgn 2</h3>
+	<figure>
+	<img src="screenshots/Design2Overview.png" alt="Design 2 Overview" /><figcaption>Design 2 Overview</figcaption>
+	</figure>
+	<p><a href="design2/">Go to Design 2</a></p>
+	<p>The second design is an enhanced spaghetti plot with a few interactions enabled. The purpose of this design is to help to identify lines with similar values or values changes. This design should work on other datasets with no problem.</p>
+	<h4 id="encoding-1">Encoding</h4>
+	<ol type="1">
+	<li>The countries (N) are represented by the color of lines and the national flags at the right of the plot. The flag can be seen clearly by hovering over the line.</li>
+	<li>The years (M) are encoded on the x-axis as common spaghetti plot.</li>
+	<li>The GDPS (values) are encoded on the y-axis as common spaghetti plot.</li>
+	</ol>
+	<h4 id="interation">Interation</h4>
+	<ol type="1">
+	<li>Draw rectangles using the mouse in the canvas area to select lines. The user may draw more than one rectangle at a time, and only the lines that fit into all the rectangles will be highlighted.</li>
+	</ol>
+	<figure>
+	<img src="screenshots/Design2DrawRectangles.gif" alt="Design 2 Draw Rectangles: Draw a rectangle in the canvas to select lines." /><figcaption>Design 2 Draw Rectangles: Draw a rectangle in the canvas to select lines.</figcaption>
+	</figure>
+	<ol start="2" type="1">
+	<li>Move all the rectangles by dragging the blue dot at the bottom right.</li>
+	</ol>
+	<figure>
+	<img src="screenshots/Design2DragRectangles.gif" alt="Design 2 Drag Rectangles: Drag the blue dot to move all the rectangle." /><figcaption>Design 2 Drag Rectangles: Drag the blue dot to move all the rectangle.</figcaption>
+	</figure>
+	<ol start="3" type="1">
+	<li>Clear all the rectangles by clicking the button at the bottom left.</li>
+	</ol>
+	<figure>
+	<img src="screenshots/Design2ClearRectangles.gif" alt="Design 2 Clear Rectangles: Click the button “Reset Selection” to clear all the rectangles" /><figcaption>Design 2 Clear Rectangles: Click the button “Reset Selection” to clear all the rectangles</figcaption>
+	</figure>
+	<ol start="4" type="1">
+	<li>Move the mouse across the canvas to see the GDPs of selected countries at the given year.</li>
+	</ol>
+	<figure>
+	<img src="screenshots/Design2ShowGDP.gif" alt="Design 2 Show GDP: Move the mouse in the canvas to see the GDPs of selected countries" /><figcaption>Design 2 Show GDP: Move the mouse in the canvas to see the GDPs of selected countries</figcaption>
+	</figure>
+	<ol start="5" type="1">
+	<li>Hover the mouse over a selected line to see the details of the country that it belongs to.</li>
+	</ol>
+	<figure>
+	<img src="screenshots/Design2CountryInfo.gif" alt="Design 2 Country Info: Hover over the line to see country info" /><figcaption>Design 2 Country Info: Hover over the line to see country info</figcaption>
+	</figure>
+	<h4 id="design-critique-1">Design Critique</h4>
+	<p>This design has four purposes:</p>
+	<ol type="1">
+	<li>To find lines (countries) with similar values (GDPs) at a sample (year) range. This is achieved by using rectangles to select lines.</li>
+	<li>To find lines (countries) with the desired change pattern over samples (years). This is achieved by drawing multiple rectangles.</li>
+	<li>To find lines (countries) with similar change patterns over samples (years). This is achieved by moving rectangles using the blue dot.</li>
+	<li>To get a relatively accurate value (GDP) of a line (country) at a sample point (year).</li>
+	</ol>
+	<p>However, the design also has some limitations:</p>
+	<ol type="1">
+	<li>It’s a spaghetti plot still, so it looks messy at the first impression.</li>
+	<li>It’s hard to compare if too many lines (countries) are selected. In this case, it’s still a spaghetti plot.</li>
+	<li>It’s impossible to select two lines (countries) that are far away without selecting the lines (countries) in between at the same time.</li>
+	<li>The line (country) encoding is not efficient as the user are required to hover to know the info of the selected line (country).</li>
+	<li>The design runs leggy at my computer, and I have no idea why it happens as I designed my code to be efficient during the interactions. It’s probably due to the inefficiency of javascript.</li>
+	</ol>
+	<h2 id="reference">Reference</h2>
+	<ol type="1">
+	<li>D3: For building the visualization. <a href="https://github.com/d3/d3" class="uri">https://github.com/d3/d3</a></li>
+	<li>GDP (current US$) - THE WORLD BANK: The dataset used to design the visualization. <a href="https://data.worldbank.org/indicator/NY.GDP.MKTP.CD?end=2017&amp;start=1960&amp;view=chart" class="uri">https://data.worldbank.org/indicator/NY.GDP.MKTP.CD?end=2017&amp;start=1960&amp;view=chart</a></li>
+	<li>flag-icon-css: For the svg flags. <a href="https://github.com/lipis/flag-icon-css" class="uri">https://github.com/lipis/flag-icon-css</a></li>
+	<li>country-iso-3-to-2: For translating the Alpha 3 country code to Alpha 2 country code. <a href="https://github.com/vtex/country-iso-3-to-2" class="uri">https://github.com/vtex/country-iso-3-to-2</a></li>
+	<li>killercup/pandoc.css: For the index page style. <a href="https://gist.github.com/killercup/5917178" class="uri">https://gist.github.com/killercup/5917178</a></li>
+	</ol>
 </body>
 </html>

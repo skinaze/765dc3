@@ -317,6 +317,7 @@ function changeToYear(year) {
 		.attr("r", circleR)
 		.attr("cx",function(d){return d.x;})
 		.attr("cy",function(d){return d.y;})
+		.on("mouseover", nodeMouseOver)
 		.merge(nodes);
 
 	
