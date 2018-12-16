@@ -1,1 +1,32 @@
-<p>Hello, World! </p>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+	<title>CS765 DC3</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="keywords" content="" />
+	<meta name="description" content="" />
+	<link rel="stylesheet" type="text/css" href="pandoc.css">
+</head>
+<body>
+    <h1 id="cs765-dc3-designs">CS765 DC3 designs</h1>
+    <h2 id="dataset">Dataset</h2>
+    <p>I have found a dataset online describing the GPD of different nations since 1960. <a href="https://data.worldbank.org/indicator/NY.GDP.MKTP.CD?end=2017&amp;start=1960&amp;view=chart" class="uri">https://data.worldbank.org/indicator/NY.GDP.MKTP.CD?end=2017&amp;start=1960&amp;view=chart</a> This dataset involve all the countries in the world (268) and covers a period over 70 years. So, this dataset fits into the defined case:</p>
+    <ol type="1">
+    <li>The number of “lines” (N) is the number of countries (268).</li>
+    <li>The number of samples of each line (M) is 77.</li>
+    <li>The dynamic range of the values is between <span class="math inline">8 × 10<sup>7</sup></span> and <span class="math inline">8 × 10<sup>13</sup></span>.</li>
+    </ol>
+    <p>I used this dataset for both of my designs. But the designs themselves can also be implemented for other datasets</p>
+    <h2 id="design">Design</h2>
+    <h3 id="design-1">Design 1</h3>
+    <p><a href="design1/">Go to Design 1</a></p>
+    <p>The first design encodes the year into data change during animation. So, it should work all the similar type of dataset as long as one measurement is time.</p>
+    <p>In this design, the countries are represented by their national flags and the area taken by one country is the amount of GDP. The change of GDP is shown as an animation through time. This animation starts automatically and can pause or continue using the button at the bottom left of the design. The user can also use the slider at the bottom of the design to slide to a fixed year.</p>
+    <p>The problem with this design is that it requires a lot of computational power and make requires a lot of time to become stable for the recent years.</p>
+    <h3 id="deisgn-2">Deisgn 2</h3>
+    <p><a href="design2/">Go to Design 2</a></p>
+    <p>The second design is an enhanced spaghetti plot with a few interactions enabled. The purpose of this design is to help to identify lines with similar values or values changes. This design should work on other datasets with no problem.</p>
+    <p>In this design, the countries are encoded in different colors as well as national flags at the right of the plot. The user can drag a rectangle on the canvas area to create a block of selection. All the lines with data points in this area will be highlighted. Having multiple rectangles is supported, and only those lines that fit into all the All the rectangles will be highlighted. The user can move the mouse over the canvas area to show accurate data of the highlighted lines at the given x position. The user can also hover over the a line to see what nation that the line belongs to. The user can also move all the rectangle by dragging the blue dot at the bottom right to move all the rectangles. This can be helpful to identify lines with similar patterns.</p>
+</body>
+</html>

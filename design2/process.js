@@ -120,6 +120,19 @@ function process() {
             .attr('id', 'y-axis')
             .attr('transform', "translate("+(leftPadding)+",0)")
             .call(yAxis);
+        var vLines = svg.append('g')
+        	.attr('id', 'vLines');
+        for (var year = yearMin; year <= yearMax; year++) {
+        	vLines.append('line')
+        		.attr("class", "vline")
+        		.attr("id", function(d){return "vline-"+year;})
+        		.attr("stroke", "#bdbdbd")
+        		.attr("stroke-width", 1)
+        		.attr("y1", topPadding)
+        		.attr("y2", topPadding+height)
+        		.attr("x1", xScale(new Date(year,0)))
+        		.attr("x2", xScale(new Date(year,0)));
+        }
 
         // draw curves
         var curveArea = svg.append('g')

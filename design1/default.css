@@ -1,10 +1,23 @@
+#canvas {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+}
+
+#drawing {
+  width: 75%
+}
+
+#countryInfo {
+  width: 25%;
+}
+
 .slidecontainer {
-  width: 75%;
+  width: 100%;
 }
 
 .slider {
   -webkit-appearance: none;
-  width: 75%;
+  width: 100%;
   height: 25px;
   background: #d3d3d3;
   outline: none;
@@ -33,11 +46,16 @@
   cursor: pointer;
 }
 
-#svg{
-    width: 75%;
+#svg {
+    width: 100%;
     height: 650px;
 }
 
 #play {
     color: #4CAF50;
+}
+
+#countrysvg {
+  width: 100%;
+  height: 650px;
 }

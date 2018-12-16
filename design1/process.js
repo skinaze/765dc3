@@ -4,6 +4,7 @@ var dataByYear;
 var countries;
 var countryInitCenter;
 var simulation;
+var countryInfo;
 var nodes;
 var initialFinish = 0;
 var currentYear = 1960;
@@ -12,6 +13,8 @@ var timeout = 3000;
 
 var circleR = 8;
 var BasicUnit = 1e11;
+
+var flagWidth = 200;
 
 // scales
 var countryColor;
@@ -24,6 +27,7 @@ function process() {
 
 	d3.dsv(",", "GDP.csv").then(function(data){
 		DataParse(data);
+		LoadFlagsSqr(countries);
 		DefineFlag(countries);
 		DrawSVG(dataByYear, countries);
 		initialFinish = 1;
@@ -91,7 +95,7 @@ function process() {
             var otherDots = Math.ceil(othersByYear[year]/BasicUnit);
             // insert all the nodes
 			for (var i = 0; i < otherDots; i++) {
-				var id = "Other"+i;
+				var id = "Others"+i;
 				var dot = allDots.find(findById, id);
 				if (dot == undefined) {
 					dot = new Object;
@@ -117,6 +121,14 @@ function process() {
 				}
 			}
         }
+	}
+
+	function LoadFlagsSqr(countries) {
+		var flagArray = new Array;
+		countries.forEach(country => {
+			flagArray.push(GetFlagSqure(country));
+		})
+		preloadImages(flagArray);
 	}
 
 	function DefineFlag(countries) {
@@ -147,6 +159,28 @@ function process() {
 	}
 
 	function DrawSVG(data, countries) {
+		// Geth the actural size of countrysvg
+		var countrysvg = document.getElementById('countrysvg')
+		var countryWidth = countrysvg.clientWidth;
+		var countryHeight = countrysvg.clientHeight;
+
+		// The country info
+		var countrysvg = d3.select("#countrysvg")
+		countryInfo = countrysvg.append('g')
+			.attr("id", "countrysvg")
+			.attr("transform", "translate("+countryWidth/2+", "+countryHeight/2+")");
+		countryInfo.append("image")
+			.attr("id", "countryflag")
+			.attr("x", -flagWidth/2)
+			.attr("y", -flagWidth/4*3)
+			.attr("width", flagWidth)
+			.attr("height", flagWidth/4*3);
+		countryInfo.append("text")
+			.attr("id", "countryname")
+			.attr("x", 0)
+			.attr("y", 20)
+			.attr("text-anchor", "middle");
+
 		// Get the actural size of svg
 		var svg = document.getElementById('svg');
 		var width = svg.clientWidth;
@@ -164,7 +198,7 @@ function process() {
 			.domain(countries)
 			.range(d3.schemeSet3);
 
-		// The nodes
+		//The nodes
 		var svg = d3.select('#svg');
 		var nodeArea = svg.append('g')
 			.attr("id", "nodeArea");
@@ -179,7 +213,8 @@ function process() {
 			.attr("stroke-width", "1px")
 			.attr("r", circleR)
 			.attr("cx",function(d){return d.x;})
-      		.attr("cy",function(d){return d.y;});
+      		.attr("cy",function(d){return d.y;})
+      		.on("mouseover", nodeMouseOver);
 		
 		
 		// the simulation
@@ -200,6 +235,16 @@ function process() {
       	simulation.force("link").links(data[currentYear].links);
 
 	}
+}
+
+function nodeMouseOver() {
+	var countryCode = this.id.match("[A-Za-z]+")[0];
+	var country = rawData.find(function(d) {return d["Country Code"] == countryCode});
+	var countryName = (country == undefined)?"Others":country["Country Name"];
+	countryInfo.select("#countryflag")
+		.attr('xlink:href', GetFlag(countryCode));
+	countryInfo.select("#countryname")
+		.text(countryName);
 }
 
 function animate() {
@@ -229,6 +274,7 @@ function animate() {
 				.attr("r", circleR)
 				.attr("cx",function(d){return d.x;})
 				.attr("cy",function(d){return d.y;})
+				.on("mouseover", nodeMouseOver)
 				.merge(nodes);
 			
 			// the simulation
