@@ -65,7 +65,12 @@
 	<li>It’s not easy to compare the values (GDPs) between to lines (countries) that have similar values (GDPs) unless counting the exact number of circles.</li>
 	<li>The animation of a sample (year) takes a long time to finish when the values (GDPs) are large, and it’s really computational ineffective to build the visual result.</li>
 	</ol>
-	<h3 id="deisgn-2">Deisgn 2</h3>
+	<h4 id="compare-against-baseline">Compare against Baseline</h4>
+	<h5 id="against-spaghetti-plot-small-multiples">Against Spaghetti Plot &amp; Small Multiples</h5>
+	<p>This design is much better at showing the portion of different lines (countries) than the spaghetti plot or small multiples. And it scales well against large line (country) numbers, with the tradeoff of aggregating the lines (countries) with small numbers. However, this design is not good at comparing the values (GDPs) between to lines (countries) that have similar values (GDPs) or the values (GDPs) of a line (country) between two samples (years), which can be better solved using small multiples.</p>
+	<h5 id="against-multiple-heatmaps">Against Multiple Heatmaps</h5>
+	<p>This design scales better against large line (country) numbers. And it’s more accurate than the multiple heatmaps (with the assumption of “area” being a better encoding than “color saturation” for rational number). But it is relatively harder to read the actual number for lines (countries) with large values (GDPs) as the user has to count the number of circles.</p>
+	<h3 id="design-2">Design 2</h3>
 	<figure>
 	<img src="screenshots/Design2Overview.png" alt="Design 2 Overview" /><figcaption>Design 2 Overview</figcaption>
 	</figure>
@@ -124,6 +129,11 @@
 	<li>The line (country) encoding is not efficient as the user are required to hover to know the info of the selected line (country).</li>
 	<li>The design runs leggy at my computer, and I have no idea why it happens as I designed my code to be efficient during the interactions. It’s probably due to the inefficiency of javascript.</li>
 	</ol>
+	<h4 id="compare-against-baseline-1">Compare against Baseline</h4>
+	<h5 id="against-spaghetti-plot">Against Spaghetti Plot</h5>
+	<p>This design is much better in every way than the origin spaghetti plot, as it’s an enhancement of the spaghetti plot. The benefits are just the purpose I mentioned above.</p>
+	<h5 id="against-small-multiples-multiple-heatmaps">Against Small Multiples &amp; Multiple Heatmaps</h5>
+	<p>This design works better to compare the values (GDPs) of two lines (countries) nearby. And this design also adds the benefit of identifying the lines (countries) with the desired value or pattern. But the user cannot simply select a line (country) and see its data (GDP), which can be done by small multiples and multiple heatmaps.</p>
 	<h2 id="reference">Reference</h2>
 	<ol type="1">
 	<li>D3: For building the visualization. <a href="https://github.com/d3/d3" class="uri">https://github.com/d3/d3</a></li>

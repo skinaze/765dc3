@@ -56,7 +56,17 @@ However, the design also has some limitations:
 4. It's not easy to compare the values (GDPs) between to lines (countries) that have similar values (GDPs) unless counting the exact number of circles.
 5. The animation of a sample (year) takes a long time to finish when the values (GDPs) are large, and it's really computational ineffective to build the visual result.
 
-### Deisgn 2
+#### Compare against Baseline
+
+##### Against Spaghetti Plot & Small Multiples
+
+This design is much better at showing the portion of different lines (countries) than the spaghetti plot or small multiples. And it scales well against large line (country) numbers, with the tradeoff of aggregating the lines (countries) with small numbers. However, this design is not good at comparing the values (GDPs) between to lines (countries) that have similar values (GDPs) or the values (GDPs) of a line (country) between two samples (years), which can be better solved using small multiples.
+
+##### Against Multiple Heatmaps
+
+This design scales better against large line (country) numbers. And it's more accurate than the multiple heatmaps (with the assumption of "area" being a better encoding than "color saturation" for rational number). But it is relatively harder to read the actual number for lines (countries) with large values (GDPs) as the user has to count the number of circles.
+
+### Design 2
 
 ![Design 2 Overview](screenshots/Design2Overview.png)
 
@@ -108,6 +118,16 @@ However, the design also has some limitations:
 3. It's impossible to select two lines (countries) that are far away without selecting the lines (countries) in between at the same time.
 4. The line (country) encoding is not efficient as the user are required to hover to know the info of the selected line (country). 
 5. The design runs leggy at my computer, and I have no idea why it happens as I designed my code to be efficient during the interactions. It's probably due to the inefficiency of javascript.
+
+#### Compare against Baseline
+
+##### Against Spaghetti Plot
+
+This design is much better in every way than the origin spaghetti plot, as it's an enhancement of the spaghetti plot. The benefits are just the purpose I mentioned above.
+
+##### Against Small Multiples & Multiple Heatmaps
+
+This design works better to compare the values (GDPs) of two lines (countries) nearby. And this design also adds the benefit of identifying the lines (countries) with the desired value or pattern. But the user cannot simply select a line (country) and see its data (GDP), which can be done by small multiples and multiple heatmaps.
 
 ## Reference
 
