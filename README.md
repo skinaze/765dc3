@@ -1,4 +1,5 @@
 # CS765 DC3 designs
+By Harry Zhou
 
 ## Dataset
 

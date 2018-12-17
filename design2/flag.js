@@ -254,9 +254,9 @@ function GetCountryISO2(countryCode) {
 }
 
 function GetFlag(countryCode) {
-  return "flags/4x3/"+GetCountryISO2(countryCode)+".svg";
+  return "flags/4x3/"+GetCountryISO2(countryCode).toLowerCase();+".svg";
 }
 
 function GetFlagSqure(countryCode) {
-  return "flags/1x1/"+GetCountryISO2(countryCode)+".svg";
+  return "flags/1x1/"+GetCountryISO2(countryCode).toLowerCase();+".svg";
 }
